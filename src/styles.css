@@ -69,6 +69,12 @@ body {
   width: 34px;
 }
 
+.square-winner-cell {
+  border-color: #3d24cb;
+  background-color: #6e5cd7;
+  color: #fff;
+}
+
 .square .value {
   font-size: 24px;
   font-weight: bold;

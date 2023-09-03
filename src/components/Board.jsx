@@ -6,7 +6,7 @@ export default function Board({ xIsNext, squares, onPlay }) {
 
   const status = (
     winner
-    ? `Winner: ${winner}`
+    ? `Winner: ${winner.char}`
     : `Next player: ${xIsNext ? 'X' : '0'}`
   );
 
@@ -31,6 +31,7 @@ export default function Board({ xIsNext, squares, onPlay }) {
             key={cellIndex}
             value={squares[cellIndex]}
             index={cellIndex}
+            winnerCell={(winner && winner.cells.indexOf(cellIndex) !== -1)}
             onSquareClick={() => handleClick(cellIndex)}
           />
       );

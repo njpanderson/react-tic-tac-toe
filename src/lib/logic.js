@@ -41,10 +41,16 @@ export function calculateWinner(squares) {
     const values = lines[i].map((i) => squares[i]);
 
     if (values.every((value) => value === 'X'))
-      return 'X';
+      return {
+        char: 'X',
+        cells: lines[i]
+      };
 
     if (values.every((value) => value === '0'))
-      return '0';
+      return {
+        char: '0',
+        cells: lines[i]
+      };
   }
 
   return null;
