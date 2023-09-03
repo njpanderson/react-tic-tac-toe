@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useEffect } from 'react';
 import Board from './Board';
 
 const sizes = Array(4).fill(0).map((value, index) => Math.pow(index + 3, 2));
@@ -22,18 +23,14 @@ export default function Game() {
   const currentSquares = gameState.history[gameState.currentMove].squares;
   const xIsNext = gameState.currentMove % 2 === 0;
 
-  function boardSizeUpdater(size) {
-    const newSize = parseInt(size, 10);
-
+  useEffect(() => {
     gameState.setHistory([{
       move: 0,
-      squares: Array(sizes[newSize]).fill(null)
+      squares: Array(sizes[gameState.boardSize]).fill(null)
     }]);
 
     gameState.setCurrentMove(initialState.currentMove);
-
-    return newSize;
-  }
+  }, [gameState.boardSize]);
 
   function moves() {
     const moves = [];
@@ -95,7 +92,7 @@ export default function Game() {
           min="0"
           max={sizes.length - 1}
           value={gameState.boardSize}
-          onChange={e => gameState.setBoardSize(() => boardSizeUpdater(e.target.value))}
+          onChange={e => gameState.setBoardSize(parseInt(e.target.value, 10))}
         />
       </div>
 
