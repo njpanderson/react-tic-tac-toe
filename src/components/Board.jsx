@@ -10,7 +10,7 @@ export default function Board({ xIsNext, squares, onPlay }) {
     : `Next player: ${xIsNext ? 'X' : '0'}`
   );
 
-  function handleClick(i) {
+  function handleClick(event, i) {
     if (squares[i] || calculateWinner(squares))
       return;
 
@@ -32,7 +32,7 @@ export default function Board({ xIsNext, squares, onPlay }) {
             value={squares[cellIndex]}
             index={cellIndex}
             winnerCell={(winner && winner.cells.indexOf(cellIndex) !== -1)}
-            onSquareClick={() => handleClick(cellIndex)}
+            onSquareClick={handleClick}
           />
       );
     });
