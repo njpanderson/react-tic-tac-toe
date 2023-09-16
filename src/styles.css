@@ -111,3 +111,23 @@ body {
 .controls {
   width: 100%;
 }
+
+.history {
+  list-style: none;
+  padding: 0;
+  margin: .5rem 0;
+}
+
+.history li {
+  display: flex;
+  margin-bottom: .25rem;
+}
+
+.history .coords {
+  margin-left: .25rem;
+  padding: 2px 3px;
+  font-size: .675rem;
+  border-radius: 4px;
+  background-color: #6e5cd7;
+  color: #fff;
+}

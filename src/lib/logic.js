@@ -1,7 +1,11 @@
 const lines = [];
 
+export function getRowSize(squares) {
+  return Math.round(Math.sqrt(squares.length));
+}
+
 export function getLines(squares) {
-  const rowSize = Math.round(Math.sqrt(squares.length));
+  const rowSize = getRowSize(squares);
 
   // Check cached lines exist (and are current shape)
   if (lines.length === (squares.length / 2) + 2)

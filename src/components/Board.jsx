@@ -10,13 +10,13 @@ export default function Board({ xIsNext, squares, onPlay }) {
     : `Next player: ${xIsNext ? 'X' : '0'}`
   );
 
-  function handleClick(event, i) {
-    if (squares[i] || calculateWinner(squares))
+  function handleClick(event, index) {
+    if (squares[index] || calculateWinner(squares))
       return;
 
     const nextSquares = squares.slice();
-    nextSquares[i] = (xIsNext ? 'X' : '0');
-    onPlay(nextSquares);
+    nextSquares[index] = (xIsNext ? 'X' : '0');
+    onPlay(nextSquares, index);
   }
 
   const cellsPerRow = Math.round(Math.sqrt(squares.length));

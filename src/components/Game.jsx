@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, StrictMode, useEffect } from 'react';
+
 import Board from './Board';
+import { getRowSize } from '../lib/logic';
 
 const sizes = Array(4).fill(0).map((value, index) => Math.pow(index + 3, 2));
 
@@ -58,6 +59,12 @@ export default function Game() {
               (item.move === 0) ? 'Go to start' : `Go to move #${item.move}`
             }</button>
           )}
+          {(typeof item.col !== 'undefined' && typeof item.row !== 'undefined') ?
+            <span className="coords">
+              ({item.col}, {item.row})
+            </span>
+            : null
+          }
         </li>
       );
     }
@@ -65,10 +72,14 @@ export default function Game() {
     return moves;
   }
 
-  function handlePlay(nextSquares) {
+  function handlePlay(nextSquares, index) {
+    const rowSize = getRowSize(nextSquares);
+
     const nextHistory = [...gameState.history.slice(0, gameState.currentMove + 1), {
       move: gameState.currentMove + 1,
-      squares: nextSquares
+      squares: nextSquares,
+      col: index % rowSize,
+      row: Math.floor(index / rowSize) % rowSize
     }];
 
     gameState.setHistory(nextHistory);
@@ -84,30 +95,32 @@ export default function Game() {
   }
 
   return (
-    <div className="game">
-      <div className="controls">
-        Board Size:
-        <input
-          type="range"
-          min="0"
-          max={sizes.length - 1}
-          value={gameState.boardSize}
-          onChange={e => gameState.setBoardSize(parseInt(e.target.value, 10))}
-        />
-      </div>
+    <StrictMode>
+      <div className="game">
+        <div className="controls">
+          Board Size:
+          <input
+            type="range"
+            min="0"
+            max={sizes.length - 1}
+            value={gameState.boardSize}
+            onChange={e => gameState.setBoardSize(parseInt(e.target.value, 10))}
+          />
+        </div>
 
-      <div className="game-board">
-        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay}/>
-      </div>
+        <div className="game-board">
+          <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay}/>
+        </div>
 
-      <div className="game-info">
-        <p className="sort">
-          <span>Sort:</span>
-          <button onClick={() => sortMoves()}>⬇</button>
-          <button onClick={() => sortMoves(false)}>⬆</button>
-        </p>
-        <ol>{moves()}</ol>
+        <div className="game-info">
+          <p className="sort">
+            <span>Sort:</span>
+            <button onClick={() => sortMoves()}>⬇</button>
+            <button onClick={() => sortMoves(false)}>⬆</button>
+          </p>
+          <ul className="history">{moves()}</ul>
+        </div>
       </div>
-    </div>
+    </StrictMode>
   );
 }
