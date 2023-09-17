@@ -1,4 +1,4 @@
-import { useState, StrictMode, useEffect } from 'react';
+import { useState, StrictMode } from 'react';
 
 import Board from './Board';
 import { getRowSize } from '../lib/logic';
@@ -23,15 +23,6 @@ export default function Game() {
 
   const currentSquares = gameState.history[gameState.currentMove].squares;
   const xIsNext = gameState.currentMove % 2 === 0;
-
-  useEffect(() => {
-    gameState.setHistory([{
-      move: 0,
-      squares: Array(sizes[gameState.boardSize]).fill(null)
-    }]);
-
-    gameState.setCurrentMove(initialState.currentMove);
-  }, [gameState.boardSize]);
 
   function moves() {
     const moves = [];
@@ -72,6 +63,14 @@ export default function Game() {
     return moves;
   }
 
+  function jumpTo(nextMove) {
+    gameState.setCurrentMove(nextMove);
+  }
+
+  function sortMoves(ascending = true) {
+    gameState.setHistoryOrderAsc(ascending);
+  }
+
   function handlePlay(nextSquares, index) {
     const rowSize = getRowSize(nextSquares);
 
@@ -86,12 +85,20 @@ export default function Game() {
     gameState.setCurrentMove(nextHistory.length - 1);
   }
 
-  function jumpTo(nextMove) {
-    gameState.setCurrentMove(nextMove);
-  }
+  function onBoardSizeChange(event) {
+    const size = parseInt(event.target.value, 10);
 
-  function sortMoves(ascending = true) {
-    gameState.setHistoryOrderAsc(ascending);
+    // Set the board size as needed
+    gameState.setBoardSize(size);
+
+    // Clear the history and change the squares array
+    gameState.setHistory([{
+      move: 0,
+      squares: Array(sizes[size]).fill(null)
+    }]);
+
+    // Set the current move back to zero
+    gameState.setCurrentMove(initialState.currentMove);
   }
 
   return (
@@ -104,7 +111,7 @@ export default function Game() {
             min="0"
             max={sizes.length - 1}
             value={gameState.boardSize}
-            onChange={e => gameState.setBoardSize(parseInt(e.target.value, 10))}
+            onChange={onBoardSizeChange}
           />
         </div>
 
