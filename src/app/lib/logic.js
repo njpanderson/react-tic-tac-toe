@@ -1,4 +1,4 @@
-const lines = [];
+const lines = {};
 
 export function getRowSize(squares) {
   return Math.round(Math.sqrt(squares.length));
@@ -7,9 +7,12 @@ export function getRowSize(squares) {
 export function getLines(squares) {
   const rowSize = getRowSize(squares);
 
+  if (!lines[squares.length])
+    lines[squares.length] = [];
+
   // Check cached lines exist (and are current shape)
-  if (lines.length === (squares.length / 2) + 2)
-    return lines;
+  if (lines[squares.length].length === (squares.length / 2) + 2)
+    return lines[squares.length];
 
   /**
    * Create rows and columns
@@ -24,18 +27,18 @@ export function getLines(squares) {
    */
   for (let a = 0; a < squares.length; a += rowSize) {
     // Row line, eg: 0, 1, 2; 3, 4, 5; 6, 7, 8
-    lines.push(Array.from(Array(rowSize).fill(0), (x, i) => a + i));
+    lines[squares.length].push(Array.from(Array(rowSize).fill(0), (x, i) => a + i));
     // Column line, eg: 0, 3, 6; 1, 4, 5; 2, 5, 8
-    lines.push(Array.from(Array(rowSize).fill(0), (x, i) => (a / rowSize) + (i * rowSize)));
+    lines[squares.length].push(Array.from(Array(rowSize).fill(0), (x, i) => (a / rowSize) + (i * rowSize)));
   }
 
   // Create diagonal line from top left to bottom right, e.g: (0, 4, 8)
-  lines.push(Array.from(Array(rowSize).fill(0), (x, i) => i + (i * (rowSize))));
+  lines[squares.length].push(Array.from(Array(rowSize).fill(0), (x, i) => i + (i * (rowSize))));
 
   // Create diagonal line from top right to bottom left, e.g: (2, 4, 6)
-  lines.push(Array.from(Array(rowSize).fill(rowSize - 1), (x, i) => x + (i * (rowSize - 1))));
+  lines[squares.length].push(Array.from(Array(rowSize).fill(rowSize - 1), (x, i) => x + (i * (rowSize - 1))));
 
-  return lines;
+  return lines[squares.length];
 }
 
 export function calculateWinner(squares) {

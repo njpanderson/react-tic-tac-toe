@@ -1,6 +1,9 @@
+"use client"
+
 import { useState, StrictMode } from 'react';
 
 import Board from './Board';
+import Button from './Button';
 import { getRowSize } from '../lib/logic';
 
 const sizes = Array(4).fill(0).map((value, index) => Math.pow(index + 3, 2));
@@ -36,7 +39,7 @@ export default function Game() {
       const item = gameState.history[a];
 
       moves.push(
-        <li key={item.move}>
+        <li key={item.move} className="mb-1">
           {a === gameState.currentMove ? (
             <span>
               {a === 0 ? (
@@ -46,12 +49,15 @@ export default function Game() {
               )}
             </span>
           ) : (
-            <button onClick={() => jumpTo(item.move)}>{
+            <button
+              onClick={() => jumpTo(item.move)}
+              className="underline hover:text-green-600"
+            >{
               (item.move === 0) ? 'Go to start' : `Go to move #${item.move}`
             }</button>
           )}
           {(typeof item.col !== 'undefined' && typeof item.row !== 'undefined') ?
-            <span className="coords">
+            <span className="inline-block rounded-md ml-1 px-[3px] py-[2px] text-xs text-white bg-green-600">
               ({item.col}, {item.row})
             </span>
             : null
@@ -103,29 +109,34 @@ export default function Game() {
 
   return (
     <StrictMode>
-      <div className="game">
-        <div className="controls">
-          Board Size:
-          <input
-            type="range"
-            min="0"
-            max={sizes.length - 1}
-            value={gameState.boardSize}
-            onChange={onBoardSizeChange}
-          />
-        </div>
+      <div className="container h-screen flex flex-col justify-center content-center px-4 sm:mx-auto" data-component="game">
+        <div className="grid grid-cols-12 gap-4">
+          <div className="col-span-full sm:col-span-8 flex flex-wrap flex-col content-center">
+            <div className="flex flex-wrap justify-center my-2" data-component="controls">
+              <span className="w-full text-center">Board Size:</span>
+              <input
+                type="range"
+                min="0"
+                className="ml-2 block"
+                max={sizes.length - 1}
+                value={gameState.boardSize}
+                onChange={onBoardSizeChange}
+              />
+            </div>
 
-        <div className="game-board">
-          <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay}/>
-        </div>
+            <div className="mx-auto overflow-hidden my-4 p-[1px]" data-component="game-board">
+              <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay}/>
+            </div>
+          </div>
 
-        <div className="game-info">
-          <p className="sort">
-            <span>Sort:</span>
-            <button onClick={() => sortMoves()}>⬇</button>
-            <button onClick={() => sortMoves(false)}>⬆</button>
-          </p>
-          <ul className="history">{moves()}</ul>
+          <div className="group col-span-full sm:col-span-4">
+            <p className="my-2">
+              <Button onClick={() => sortMoves()}>Newer ⬇</Button>
+              <Button onClick={() => sortMoves(false)}>Older ⬆</Button>
+            </p>
+            <ul className="text-sm mt-3 pt-2 border-t border-grey-300 text-gray-400
+              group-hover:text-gray-900 transition duration-700 overflow-y-auto max-h-[300px]">{moves()}</ul>
+          </div>
         </div>
       </div>
     </StrictMode>

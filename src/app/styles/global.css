@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* [class^=col] {
+	background-color: rgba(255, 255, 90, 0.4);
+} */
+
+.btn {
+	@apply inline-flex justify-center content-center align-middle px-2 py-1 bg-blue-400 mr-1 rounded-md shadow-sm relative;
+}
+
+.btn:hover,
+.btn:focus {
+	@apply -left-[1px] -top-[1px] shadow-md bg-blue-300;
+}

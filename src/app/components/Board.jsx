@@ -25,12 +25,34 @@ export default function Board({ xIsNext, squares, onPlay }) {
   const boardRows = cellRow.map((row, rowIndex) => {
     const rowCells = cellRow.map((square, index) => {
       const cellIndex = index + (cellsPerRow * rowIndex);
+      let className = '';
+
+      if (index % cellsPerRow === (cellsPerRow - 1)) {
+        // Right side
+        if (rowIndex === 0) {
+          // Top
+          className = 'rounded-tr-lg';
+        } else if (rowIndex === (squares.length / cellsPerRow) - 1) {
+          // Bottom
+          className = 'rounded-br-lg';
+        }
+      } else if (index === 0) {
+        // Left side
+        if (rowIndex === 0) {
+          // Top
+          className = 'rounded-tl-lg';
+        } else if (rowIndex === (squares.length / cellsPerRow) - 1) {
+          // Bottom
+          className = 'rounded-bl-lg';
+        }
+      }
 
       return (
           <Square
             key={cellIndex}
             value={squares[cellIndex]}
             index={cellIndex}
+            className={className}
             winnerCell={(winner && winner.cells.indexOf(cellIndex) !== -1)}
             onSquareClick={handleClick}
           />
@@ -38,7 +60,7 @@ export default function Board({ xIsNext, squares, onPlay }) {
     });
 
     return (
-      <div className="board-row" key={rowIndex}>
+      <div className="after:clear-left after:table" key={rowIndex}>
         {rowCells}
       </div>
     )
@@ -46,7 +68,7 @@ export default function Board({ xIsNext, squares, onPlay }) {
 
   return (
     <>
-      <p className='status'>{status}</p>
+      <p className="font-medium text-sm mb-1 text-center">{status}</p>
       {boardRows}
     </>
   );
